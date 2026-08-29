@@ -1,0 +1,6 @@
+{
+  "app.name": "Blinko Habits",
+  "app.summary": "Build routines with a calm daily streak tracker.",
+  "app.description": "Create flexible habits, check in each day, and see streaks and recent progress without background polling.",
+  "habits.open": "Blinko Habits"
+}

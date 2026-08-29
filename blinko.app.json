@@ -1,0 +1,56 @@
+{
+  "appId": "cloud.blinko.habits",
+  "version": "0.1.0",
+  "minRuntimeApi": "1.0.0",
+  "source": { "repository": "https://github.com/blinko-space/blinko-habits", "revision": "0000000000000000000000000000000000000000" },
+  "license": "MIT",
+  "contentHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "listing": { "nameKey": "app.name", "summaryKey": "app.summary", "descriptionKey": "app.description" },
+  "targets": { "web": { "entry": "src/index.ts", "minHostVersion": "1.0.0", "permissions": [], "optionalPermissions": [] } },
+  "ui": {
+    "minComponentsVersion": "1.0.0",
+    "minTokensVersion": "1.0.0",
+    "customViews": [{ "id": "habits.workspace", "entry": "ui/main.tsx", "width": 800, "height": 760, "minWidth": 280, "minHeight": 360 }]
+  },
+  "locales": { "default": "en", "supported": ["en", "zh-CN", "zh-TW"] },
+  "permissions": { "required": ["data:own:read", "data:own:write", "search:index:lexical"], "optional": [] },
+  "network": { "domains": [] },
+  "oauth": { "redirectUris": [] },
+  "dataTypes": [{
+    "typeKey": "habit.item",
+    "schemaVersion": 1,
+    "sensitivity": "normal",
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "note", "color", "schedule", "completions", "createdAt", "updatedAt"],
+      "properties": {
+        "title": { "type": "string", "maxLength": 120 },
+        "note": { "type": "string", "maxLength": 2000 },
+        "color": { "type": "string", "maxLength": 20 },
+        "schedule": { "type": "string", "maxLength": 100 },
+        "completions": { "type": "string", "maxLength": 200000 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "indexes": [
+      { "field": "title", "kind": "string", "filterable": true, "sortable": true },
+      { "field": "updatedAt", "kind": "datetime", "filterable": true, "sortable": true }
+    ],
+    "search": { "lexical": ["title", "note"], "semantic": [] }
+  }],
+  "commands": [],
+  "contributes": { "items": [{
+    "id": "habits.sidebar",
+    "kind": "view",
+    "surface": "sidebar",
+    "handler": "habits.workspace",
+    "viewId": "habits.workspace",
+    "icon": "app",
+    "titleKey": "habits.open",
+    "group": "productivity",
+    "order": 44
+  }] },
+  "activationEvents": []
+}
