@@ -91,10 +91,10 @@ function App() {
   const scheduledToday=records.filter((record)=>isScheduled(record.data,today));
   const doneToday=scheduledToday.filter((record)=>parseCompletions(record.data.completions).includes(today)).length;
   return <main className="app-shell">
-    <header className="topbar"><span className="brand-mark"><Icon name="sprout" size={20}/></span><div><h1>{t("app")}</h1><p>{t("subtitle")}</p></div><button className="primary" onClick={()=>{setError("");setForm({title:"",note:"",color:"sun",schedule:[0,1,2,3,4,5,6]});}}><Icon name="plus" size={17}/>{t("newHabit")}</button></header>
     {conflict&&<div className="banner"><span>{t("conflict")}</span><button onClick={()=>void load()}><Icon name="reload" size={15}/>{t("reload")}</button></div>}
     {error&&!form&&<div className="banner error"><span>{error}</span><button onClick={()=>setError("")}>{t("close")}</button></div>}
     <section className="content">
+      <div className="content-actions"><button className="primary" onClick={()=>{setError("");setForm({title:"",note:"",color:"sun",schedule:[0,1,2,3,4,5,6]});}}><Icon name="plus" size={17}/>{t("newHabit")}</button></div>
       <aside className="summary">
         <div className="today-ring" style={{"--progress":scheduledToday.length?`${doneToday/scheduledToday.length*360}deg`:"0deg"} as CSSProperties}><span><strong>{doneToday}</strong><small>/ {scheduledToday.length}</small></span></div>
         <div><strong>{t("today")}</strong><p>{doneToday} {t("completed")}</p></div>
