@@ -47,7 +47,7 @@
     "surface": "sidebar",
     "handler": "habits.workspace",
     "viewId": "habits.workspace",
-    "icon": "app",
+    "icon": "tabler:calendar-check",
     "titleKey": "habits.open",
     "group": "productivity",
     "order": 44
