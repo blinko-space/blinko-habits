@@ -1,12 +1,12 @@
 {
   "appId": "cloud.blinko.habits",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "minRuntimeApi": "1.0.0",
   "source": { "repository": "https://github.com/blinko-space/blinko-habits", "revision": "0000000000000000000000000000000000000000" },
   "license": "MIT",
   "contentHash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
   "listing": { "nameKey": "app.name", "summaryKey": "app.summary", "descriptionKey": "app.description" },
-  "targets": { "web": { "entry": "src/index.ts", "minHostVersion": "1.1.0", "permissions": [], "optionalPermissions": [] } },
+  "targets": { "web": { "entry": "src/index.ts", "minHostVersion": "1.0.0", "permissions": [], "optionalPermissions": [] } },
   "ui": {
     "minComponentsVersion": "1.0.0",
     "minTokensVersion": "1.0.0",
