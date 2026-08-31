@@ -6,8 +6,8 @@ import { parseExtensionManifest } from "@blinko-cloud/cli/sdk";
 import { HABIT_TYPE_KEY, createHabit, isScheduled, parseCompletions, streaks, toggleCompletion } from "../ui/model";
 
 const root=resolve(import.meta.dirname,"..");
-const blinko=resolve(root,"../../packages/cli/dist/blinko.mjs");
-const runCli=(command:"validate"|"build")=>execFileSync(process.execPath,[blinko,"extension",command,"."],{cwd:root,encoding:"utf8"});
+const blinko=resolve(root,"node_modules/.bin/blinko");
+const runCli=(command:"validate"|"build")=>execFileSync(blinko,["extension",command,"."],{cwd:root,encoding:"utf8"});
 
 describe("Blinko Habits App",()=>{
   it("declares one sidebar Custom View with owned entities and no network",()=>{
