@@ -13,7 +13,7 @@ describe("Blinko Habits App",()=>{
   it("declares one sidebar Custom View with owned entities and no network",()=>{
     const source=JSON.parse(readFileSync(resolve(root,"blinko.app.json"),"utf8"));
     const manifest=parseExtensionManifest(source);
-    expect(manifest).toMatchObject({appId:"cloud.blinko.habits",permissions:{required:["data:own:read","data:own:write","search:index:lexical"]},network:{domains:[]},dataTypes:[expect.objectContaining({typeKey:HABIT_TYPE_KEY})],contributes:{items:[expect.objectContaining({surface:"sidebar",viewId:"habits.workspace"})]}});
+    expect(manifest).toMatchObject({appId:"cloud.blinko.habits",permissions:{required:["data:own:read","data:own:write","device:notifications","search:index:lexical"]},network:{domains:[]},dataTypes:[expect.objectContaining({typeKey:HABIT_TYPE_KEY})],contributes:{items:[expect.objectContaining({surface:"sidebar",viewId:"habits.workspace"})]}});
     expect(source.dataTypes[0].search.lexical).toEqual(expect.arrayContaining(["title","note"]));
     expect(runCli("validate")).toContain("Valid cloud.blinko.habits");
   });
@@ -39,6 +39,7 @@ describe("Blinko Habits App",()=>{
     expect(html).toContain("Blinko Habits");
     expect(html).toContain(HABIT_TYPE_KEY);
     expect(html).toContain("prefers-reduced-motion");
+    expect(html).toContain("notifications.show");
     expect(html).not.toContain("setInterval");
     expect(html).not.toMatch(/<script\b[^>]*\bsrc\s*=/i);
     expect(html).not.toMatch(/<link\b[^>]*\brel=["']?stylesheet/i);

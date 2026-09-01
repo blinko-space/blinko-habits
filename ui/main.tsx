@@ -25,7 +25,10 @@ type Entities = {
   update<T>(id: string, input: { data: T; baseVersion: number }): Promise<EntityRecord<T>>;
   trash(id: string, baseVersion: number): Promise<EntityRecord<unknown>>;
 };
-type HabitsHost = CustomViewHost & { entities: Entities };
+type HabitsHost = CustomViewHost & {
+  entities: Entities;
+  notifications: { show(input: { title: string; body?: string }): Promise<string> };
+};
 type Form = { id?: string; title: string; note: string; color: HabitColor; schedule: number[] };
 
 const COPY = {
@@ -46,6 +49,11 @@ const COPY = {
 const presentation = customViewPresentation();
 const locale = presentation.locale.toLowerCase().startsWith("zh") ? (/(tw|hk|mo)|hant/.test(presentation.locale.toLowerCase()) ? "zh-TW" : "zh-CN") : "en";
 const copy = COPY[locale];
+const notificationCopy = {
+  en: { title: "Habit completed", body: "Checked in: {habit}" },
+  "zh-CN": { title: "习惯已完成", body: "已打卡：{habit}" },
+  "zh-TW": { title: "習慣已完成", body: "已打卡：{habit}" },
+}[locale];
 type TextKey = Exclude<keyof typeof COPY.en, "weekdays" | "weekdayNames">;
 const t = (key: TextKey): string => String(copy[key] ?? COPY.en[key]);
 const host = getCustomViewHost() as HabitsHost;
@@ -77,7 +85,15 @@ function App() {
     try { const updated=await host.entities.update<HabitData>(record.id,{data,baseVersion:record.version});setRecords((items)=>items.map((item)=>item.id===updated.id?updated:item));return true; }
     catch(err){const message=err instanceof Error?err.message:"";if(message.includes("VERSION_CONFLICT"))setConflict(true);setError(String(t("saveFailed")));return false;} finally{setBusyId(undefined);}
   };
-  const toggle=async(record:EntityRecord<HabitData>,date=today)=>{await saveRecord(record,toggleCompletion(record.data,date));};
+  const toggle=async(record:EntityRecord<HabitData>,date=today)=>{
+    const wasCompleted=parseCompletions(record.data.completions).includes(date);
+    if(await saveRecord(record,toggleCompletion(record.data,date))&&!wasCompleted&&date===today){
+      void host.notifications.show({
+        title:notificationCopy.title,
+        body:notificationCopy.body.replace("{habit}",record.data.title),
+      }).catch(()=>undefined);
+    }
+  };
   const submit=async()=>{
     if(!form?.title.trim()){setError(String(t("required")));return;} if(!form.schedule.length){setError(String(t("scheduleRequired")));return;}
     setError("");
